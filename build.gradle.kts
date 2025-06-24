@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.google.code.gson:gson:2.8.5")
+    implementation("club.snowlyicewolf:amarok-json-for-java:1.7.8")
 }
 
 tasks.jar.configure {

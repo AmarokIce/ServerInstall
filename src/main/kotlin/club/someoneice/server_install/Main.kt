@@ -1,13 +1,9 @@
 package club.someoneice.server_install
 
-import java.io.File
-
 fun main(args: Array<String>) {
-    println("Now start for readly to install server jar ......!")
-    CoreRunner()
+    LangHelper.loadLanguage("zh_CN.json")
+    CoreRunner
 
-    // Finish Work
-    println(LangHelper.transformText("lang.finishInstall"))
-    val makeChose = readln().lowercase()
-    if (makeChose == "no" || makeChose == "n") File("${System.getProperty("user.dir")}/InstallServer.bat").delete()
+    val command = "java -server -Xincgc -Xms${CoreRunner.config.memoryMin}M -Xmx${CoreRunner.config.memoryMax}M -Xss512K -XX:+AggressiveOpts -XX:+UseCompressedOops -XX:+UseCMSCompactAtFullCollection -XX:+UseFastAccessorMethods -XX:ParallelGCThreads=4 -XX:+UseConcMarkSweepGC -XX:CMSFullGCsBeforeCompaction=2 -XX:CMSInitiatingOccupancyFraction=70 -XX:-DisableExplicitGC -XX:TargetSurvivorRatio=90 -jar ${CoreRunner.serverFile.path} -nogui"
+    Runtime.getRuntime().exec("cmd.exe /k start $command")
 }

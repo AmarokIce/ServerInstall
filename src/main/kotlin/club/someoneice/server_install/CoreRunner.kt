@@ -3,37 +3,154 @@ package club.someoneice.server_install
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.system.exitProcess
 
-class CoreRunner {
-    private val ServerFile = File(System.getProperty("user.dir"), "Server.jar" )
-    private var isForgeServer: Boolean = false
+object CoreRunner {
+    val serverFile = File("./Server.jar" )
+    val config: Config = Config()
+
     init {
-        // Read Lang.
-        LangHelper()
+        if (config.shouldBuildBasicConfig) {
+            initInstallerLanguage()
 
-        // Start.
+            do {
+                var userInput = ""
+                initBasicMemory()
+                if (this.config.memoryMin > this.config.memoryMax) {
+                    println(LangHelper.transformText("lang.check.mem.fail"))
+                    continue
+                }
+
+                println(LangHelper.transformText("lang.check.mem").format(this.config.memoryMin, this.config.memoryMax))
+                print("> ")
+                userInput = readlnOrNull()?.lowercase() ?: "y"
+            } while (userInput.isNotEmpty() && userInput != "y" && userInput != "yes")
+
+            config.writeToConfig()
+        } else {
+            LangHelper.loadLanguage(this.config.language + ".json")
+        }
+
         checkJAR()
-        outputBAT()
+        checkEULA()
         outputProperties()
-        if (isForgeServer) println(LangHelper.transformText("lang.forgeJar.installFinish"))
+        createCmd()
+
+        println(LangHelper.transformText("lang.start.jar"))
+        print("> ")
+        var userInput = readlnOrNull()
+        if (userInput.isNullOrEmpty()) {
+            userInput = "y"
+        }
+
+        if (userInput != "y" && userInput != "yes") {
+            exitProcess(0)
+        }
+    }
+
+    private fun initInstallerLanguage() {
+        println("[0] English [Unfinish]")
+        println("[1] 简体中文")
+        println("[2] 繁體中文")
+
+        var userLang: Int
+        while (true) {
+            try {
+                print("> ")
+                userLang = readln().toInt()
+                if(userLang > -1 && userLang < 3) break
+                else println("Please key the number in 0 - 3 !")
+            } catch (_: NumberFormatException) {
+                println("Please key the number!")
+            }
+        }
+
+        val lang: String = when (userLang) {
+            0 -> "en_US.json"
+            1 -> "zh_CN.json"
+            2 -> "zh_TW.json"
+            else -> throw IOException()
+        }
+
+        LangHelper.loadLanguage(lang)
+        this.config.language = lang.replace(".json", "")
+    }
+
+    private fun initBasicMemory() {
+        println(LangHelper.transformText("lang.docs.mem.min"))
+        println(LangHelper.transformText("lang.check.mem.min"))
+
+        var userLang: String?
+
+        while (true) {
+            try {
+                print("> ")
+                userLang = readlnOrNull()
+                if (!userLang.isNullOrEmpty()) {
+                    this.config.memoryMin = userLang.toInt()
+                }
+                break
+            } catch (_: NumberFormatException) {
+                println("Please key the number!")
+            }
+        }
+
+        println(LangHelper.transformText("lang.docs.mem.max"))
+        println(LangHelper.transformText("lang.check.mem.max"))
+
+        while (true) {
+            try {
+                print("> ")
+                userLang = readlnOrNull()
+                if (!userLang.isNullOrEmpty()) {
+                    this.config.memoryMax = userLang.toInt()
+                }
+                break
+            } catch (_: NumberFormatException) {
+                println("Please key the number!")
+            }
+        }
     }
 
     private fun checkJAR() {
-        println(LangHelper.transformText("lang.checkJar"))
-        if (ServerFile.exists()) {
-            println(LangHelper.transformText("lang.checkJar.success"))
+        println(LangHelper.transformText("lang.check.jar"))
+        if (serverFile.exists()) {
+            println(LangHelper.transformText("lang.check.jar.success"))
             return
         }
 
-        println(LangHelper.transformText("lang.checkJar.install"))
+        println(LangHelper.transformText("lang.check.jar.fail"))
+        print("> ")
+        var userInput = readlnOrNull()
+        if (userInput.isNullOrEmpty()) {
+            userInput = "y"
+        }
 
-        try {
-            downloadJAR()
-        } catch (_: Exception) {
-            println(LangHelper.transformText("lang.checkJar.fail"))
+        if (userInput != "y" && userInput != "yes") {
+            exitProcess(0)
+        }
+
+        downloadJAR()
+    }
+
+    private fun downloadJAR() {
+        val head = "https://gh-proxy.net/"
+        val serverCoreUrl = "https://github.com/CyberdyneCC/Thermos/releases/download/58/Thermos-1.7.10-1614-server.jar"
+        val serverLibraryUrl = "https://github.com/CyberdyneCC/Thermos/releases/download/58/libraries.zip"
+
+        downLoadFromUrl(URL(head + serverCoreUrl), serverFile)
+        downLoadFromUrl(URL(head + serverLibraryUrl), File("./libraries.zip"))
+
+        val flag = !ZIPUtil.zipUtil("ThermosOfficial")
+
+        println(LangHelper.transformText(if (flag) "lang.download.fail" else "lang.download.success"))
+        if (flag) {
+            readlnOrNull()
+            exitProcess(0)
         }
     }
 
+/*
     private fun downloadJAR() {
         println(LangHelper.transformText("lang.downloadJar"))
         println("[0] Forge Server")
@@ -89,7 +206,7 @@ class CoreRunner {
                 }
 
                 if (chose == "0") {
-                    downLoadFromUrl(URL("https://github.com/CyberdyneCC/Thermos/releases/download/58/Thermos-1.7.10-1614-server.jar"), ServerFile)
+                    downLoadFromUrl(URL("https://github.com/CyberdyneCC/Thermos/releases/download/58/Thermos-1.7.10-1614-server.jar"), serverFile)
                     downLoadFromUrl(URL("https://github.com/CyberdyneCC/Thermos/releases/download/58/libraries.zip"), File(System.getProperty("user.dir"), "libraries.zip"))
                     if (!ZIPUtil.zipUtil("ThermosOfficial")) println(LangHelper.transformText("lang.thermos.fail"))
                     else println("Success!")
@@ -105,6 +222,7 @@ class CoreRunner {
 
 
     }
+*/
 
     private fun downLoadFromUrl(url: URL, file: File) {
         try {
@@ -138,34 +256,52 @@ class CoreRunner {
         return bos.toByteArray()
     }
 
-    private fun outputBAT() {
-        println(LangHelper.transformText("lang.allowEULA"))
-        val allowEULA = readLine()?.lowercase()
-
-        if (allowEULA == "n" || allowEULA == "no") {
+    private fun checkEULA() {
+        val file = File(System.getProperty("user.dir"), "eula.txt")
+        if (file.exists() && file.isFile) {
             return
         }
 
-        val fileEULA = File(System.getProperty("user.dir"), "eula.txt")
-        fileEULA.bufferedWriter().use {
+        println(LangHelper.transformText("lang.check.eula"))
+        val allowEULA = readlnOrNull()?.lowercase() ?: "y"
+
+        if (allowEULA == "n" || allowEULA == "no") {
+            exitProcess(1)
+        }
+
+        file.createNewFile()
+        file.bufferedWriter().use {
             it.write("eula=true")
         }
-
-        val fileStartServerBAT = File(System.getProperty("user.dir"), "StartServer.bat")
-        fileStartServerBAT.bufferedWriter().use {
-            it.write("java -server -Xmx 2G -jar Server.jar nogui")
-        }
-
-        // TODO - Rename helper
-
     }
 
     private fun outputProperties() {
-        try {
-            this.javaClass.getResourceAsStream("/assets/file/server.properties")!!.copyTo(File("${System.getProperty("user.dir")}/server.properties").outputStream())
-            println(LangHelper.transformText("lang.cropProperties.success"))
-        } catch (_: IOException) {
-            println(LangHelper.transformText("lang.cropProperties.fail"))
+        val file = File("./server.properties")
+        if (file.exists() && file.isFile) {
+            return
         }
+
+        file.createNewFile()
+        try {
+            this.javaClass.getResourceAsStream("/assets/file/server.properties")!!.copyTo(file.outputStream())
+            println(LangHelper.transformText("lang.check.properties.success"))
+        } catch (_: IOException) {
+            println(LangHelper.transformText("lang.check.properties.fail"))
+        }
+    }
+
+    private fun createCmd() {
+        val cmd = File("./StartServer.cmd")
+        if (cmd.exists() && cmd.isFile) {
+            return
+        }
+
+        cmd.createNewFile()
+        val command = "java -server -Xincgc -Xms${config.memoryMin}M -Xmx${config.memoryMax}M " +
+                "-Xss512K -XX:+AggressiveOpts -XX:+UseCompressedOops -XX:+UseCMSCompactAtFullCollection " +
+                "-XX:+UseFastAccessorMethods -XX:ParallelGCThreads=4 -XX:+UseConcMarkSweepGC " +
+                "-XX:CMSFullGCsBeforeCompaction=2 -XX:CMSInitiatingOccupancyFraction=70 -XX:-DisableExplicitGC " +
+                "-XX:TargetSurvivorRatio=90 -jar ${this.serverFile.path} -nogui"
+        cmd.writeText(command)
     }
 }

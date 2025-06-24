@@ -1,0 +1,25 @@
+{
+  "lang.check.jar": "检查专用服务端 Jar 文件...",
+  "lang.check.jar.fail": "未能找到专用服务端 Jar！您是否希望下载一个（默认为 Thermos）？如果您希望自备 Jar，请将对应资源放入当前根目录并将目标服务端改名为 Server.jar。 [y]",
+  "lang.check.jar.success": "已经找到专用服务端 Jar！",
+
+  "lang.download.fail": "下载失败！按下回车键退出程序。",
+  "lang.download.success": "下载成功！",
+
+  "lang.check.config.fail": "未能找到启动器配置文件，进入初始化阶段...",
+  "lang.check.config.screen": "找到启动器配置文件！正在加载...",
+  "lang.docs.mem.min": "在要求 Jvm 执行一个文档时可以指定 Jvm 具体占用多少内存。分为初始内存（也叫最小内存）和最大内存。\n由于 Jvm 的回收机制的条件之一取决于指定内存，初始内存通常决定了 Jvm 何时应该开始回收内存再利用。\n因此指定一个合适的初始内存也是相当必要的——如果您不关心这些，您只需要稍后调整最大内存即可，最小内存您可以直接回车以采取默认值。",
+  "lang.check.mem.min": "请分配初始内存（单位 MiB）。 [默认值：512]",
+  "lang.docs.mem.max": "如果您的服务器遇到了内存溢出错误，那么您需要适量增加最大内存。提供过多内存并不会使得您的服务器变的更顺畅，只会让 Jvm 更加肆意浪费珍贵的内存，因此请明智的做出决定。",
+  "lang.check.mem.max": "请分配最大内存（单位 MiB）。 [默认值：2048]",
+  "lang.check.mem": "您分配了最小内存 %s (MiB), 最大内存 %s (MiB)，请确认无误？（稍后您依然可以在 ServerConfig.json5 中修改） [y]",
+  "lang.check.mem.fail": "您的初始内存不能超过最大内存！",
+  "lang.check.mem.success": "您已经完成基本设定！",
+
+  "lang.check.properties.success": "已经完成拷贝 Properties。",
+  "lang.check.properties.fail": "拷贝 Properties 失败，请在正式开服之前处理此文件！",
+
+  "lang.check.eula": "是否接受 Mojang EULA？ [y]",
+
+  "lang.start.jar": "一切就绪！您是否现在就想开服？ [y]"
+}

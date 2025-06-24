@@ -1,0 +1,25 @@
+{
+  "lang.check.jar": "檢查專用伺服端 Jar 文件...",
+  "lang.check.jar.fail": "未能找到專用伺服端 Jar！您是否希望下載一個（默認為 Thermos）？如果您希望自備 Jar，請將對應資源放入當前根目錄並將目標伺服端改名為 Server.jar。 [y]",
+  "lang.check.jar.success": "已經找到專用伺服端 Jar！",
+
+  "lang.download.fail": "下載失敗！按下回車鍵退出程序。",
+  "lang.download.success": "下載成功！",
+
+  "lang.check.config.fail": "未能找到啟動器配置文件，進入初始化階段...",
+  "lang.check.config.screen": "找到啟動器配置文件！正在加載...",
+  "lang.docs.mem.min": "在要求 Jvm 執行一個文檔時可以指定 Jvm 具體佔用多少記憶體。分為初始記憶體（也叫最小記憶體）和最大記憶體。\n由於 Jvm 的回收機制的條件之一取決於指定記憶體，初始記憶體通常決定了 Jvm 何時應該開始回收記憶體再利用。\n因此指定一個合適的初始記憶體也是相當必要的——如果您不關心這些，您只需要稍後調整最大記憶體即可，最小記憶體您可以直接回車以採取默認值。",
+  "lang.check.mem.min": "請分配初始記憶體（單位 MiB）。 [默認值：512]",
+  "lang.docs.mem.max": "如果您的伺服器遇到了記憶體溢出錯誤，那麼您需要適量增加最大記憶體。提供過多記憶體並不會使得您的伺服器變的更順暢，只會讓 Jvm 更加肆意浪費珍貴的記憶體，因此請明智的做出決定。",
+  "lang.check.mem.max": "請分配最大記憶體（單位 MiB）。 [默認值：2048]",
+  "lang.check.mem": "您分配了最小記憶體 %s (MiB), 最大記憶體 %s (MiB)，請確認無誤？（稍後您依然可以在 ServerConfig.json5 中修改） [y]",
+  "lang.check.mem.fail": "您的初始記憶體不能超過最大記憶體！",
+  "lang.check.mem.success": "您已經完成基本設定！",
+
+  "lang.check.properties.success": "已經完成拷貝 Properties。",
+  "lang.check.properties.fail": "拷貝 Properties 失敗，請在正式開服之前處理此文件！",
+
+  "lang.check.eula": "是否接受 Mojang EULA？ [y]",
+
+  "lang.start.jar": "一切就緒！您是否現在就想開服？ [y]"
+}

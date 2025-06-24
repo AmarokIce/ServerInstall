@@ -1,0 +1,23 @@
+{
+  "lang.check.jar": "Checking the server core...",
+  "lang.check.jar.fail": "Can't found the server core's Jar! Do you wanna download not? Or if you want to setup the jar by your self, please put the jar into dir and rename it to 'Server.jar'. [y]",
+  "lang.check.jar.success": "Found the Jar！",
+
+  "lang.download.fail": "Fail to download! Pass Enter exit.",
+  "lang.download.success": "Download successful!",
+
+  "lang.check.config.fail": "Can't found the config, init...",
+  "lang.check.config.screen": "Found the config! Now start...",
+  "lang.check.mem.min": "Set the min memory for Jvm（MiB）。 [Default value：512]",
+  "lang.check.mem.max": "Set the max memory for Jvm (MiB）。 [Default value：2048]",
+  "lang.check.mem": "You set the min memory is %s (MiB), and the max memory is %s (MiB), do you want to continue？（You can set it in ServerConfig.json5 later.） [y]",
+  "lang.check.mem.fail": "You cannot set your min memory bigger than max memory！",
+  "lang.check.mem.success": "您已经完成基本设定！",
+
+  "lang.check.properties.success": "已经完成拷贝 Properties。",
+  "lang.check.properties.fail": "拷贝 Properties 失败，请在正式开服之前处理此文件！",
+
+  "lang.check.eula": "是否接受 Mojang EULA？ [y]",
+
+  "lang.start.jar": "一切就绪！您是否现在就想开服？ [y]"
+}
